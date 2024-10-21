@@ -23,11 +23,18 @@ public class Branch {
     // private Franchise franchise;
     private String franchise;
 
-    private List<Product> products = new ArrayList<>();
+    private List<String> products = new ArrayList<>();
     String getBranchId(){
         return id;
     }
     public String getFranchise(){
         return franchise;
+    }
+    public void addProduct(String branch) {
+        if (products == null) {
+            products = new ArrayList<>();
+        }
+        products.add(branch);
+        System.out.println("ID DE SUCURSAL"+branch + "PRODUCTOS"+ products );
     }
 }
