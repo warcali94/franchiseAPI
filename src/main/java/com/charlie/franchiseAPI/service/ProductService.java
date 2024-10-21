@@ -18,16 +18,16 @@ public class ProductService {
     BranchRepository branchRepository;
 
     // private Product product;
+
+    /* Create method */
     public Product saveProduct(Product newProduct) {
         try {
-            
+
             Branch branch = branchRepository.findById(newProduct.getBranch())
                     .orElseThrow(() -> new RuntimeException("Branch not found"));
 
-            System.out.println("SUCURSAL ENCONTRADA" + branch);
             // save branch in repository
             Product savedProduct = productRepository.save(newProduct);
-            System.out.println("PRODUCTO GUARDADO" + savedProduct);
 
             // Put product id into products array.
             branch.addProduct(savedProduct.getId());
@@ -38,8 +38,53 @@ public class ProductService {
             return savedProduct;
 
         } catch (Exception e) {
-            System.err.println("Error saving branch: " + e.getMessage());
-            throw new RuntimeException("Failed to save branch", e);
+            System.err.println("Error saving product: " + e.getMessage());
+            throw new RuntimeException("Failed to save product", e);
         }
     }
+
+    /* Update method */
+    public Product updateProduct(Product product) {
+        try {
+            // Busca la sucursal relacionada con el producto
+            Branch branch = branchRepository.findById(product.getBranch())
+                    .orElseThrow(() -> new RuntimeException("Branch not found"));
+
+            // Actualiza el producto en el repositorio
+            Product updatedProduct = productRepository.save(product); // Aquí deberías usar save para la actualización
+
+            // If product does not extist it'll be added.
+            if (!branch.getProducts().contains(updatedProduct.getId())) {
+                branch.addProduct(updatedProduct.getId());
+                branchRepository.save(branch);
+            }
+
+            return updatedProduct;
+
+        } catch (Exception e) {
+            System.err.println("Error updating product: " + e.getMessage());
+            throw new RuntimeException("Failed to update product", e);
+        }
+    }
+
+    /* Delete method */
+    public Product deleteProduct(Product product) {
+        try {
+            Branch branch = branchRepository.findById(product.getBranch())
+                    .orElseThrow(() -> new RuntimeException("Branch not found"));
+
+            productRepository.delete(product);
+
+            branch.removeProduct(product.getId()); // Asumiendo que tienes un método removeProduct en la clase Branch
+
+            branchRepository.save(branch);
+
+            return product; // Retorna el producto eliminado si es necesario para el seguimiento
+
+        } catch (Exception e) {
+            System.err.println("Error deleting product: " + e.getMessage());
+            throw new RuntimeException("Failed to delete product", e);
+        }
+    }
+
 }

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +38,20 @@ public class FranchiseController {
 public ResponseEntity<Franchise> addFranchise(@RequestBody Franchise franchise) {
     try {
         System.out.println("FRANQUICIA ENTRANDO: " + franchise);
+        Franchise savedFranchise = franchiseService.save(franchise);
+        URI location = URI.create("/api/franchises/" + savedFranchise.getId());
+        System.out.println("LOCATION: " + location);
+        return ResponseEntity.created(location).body(savedFranchise);
+    } catch (Exception e) {
+        // Log the exception and return a more specific error response
+        System.err.println("Error saving franchise: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
+
+@PutMapping
+public ResponseEntity<Franchise> updateFranchise(@RequestBody Franchise franchise) {
+    try {
         Franchise savedFranchise = franchiseService.save(franchise);
         URI location = URI.create("/api/franchises/" + savedFranchise.getId());
         System.out.println("LOCATION: " + location);

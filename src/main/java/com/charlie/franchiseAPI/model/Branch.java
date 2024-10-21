@@ -37,4 +37,8 @@ public class Branch {
         products.add(branch);
         System.out.println("ID DE SUCURSAL"+branch + "PRODUCTOS"+ products );
     }
+
+    public void removeProduct(String productId) {
+        products.remove(productId);
+    }
 }
