@@ -17,5 +17,13 @@ API Rest for create franchises and their branches with a list of products
 
 To start development server:
 
+**Endpoints:**
+(GET/POST/DELETE/PUT)
+
+For franchises ---------->  "/api/branches".
+For branches ---------->  "/api/branches".
+For product ---------->  "/api/branches".
+
 ```bash
 ./gradle bootRun
+
